@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#111111">
+    <title>Barbería Donde El Canche - Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --barber-black: #111111;
+            --barber-cream: #eceae6;
+            --barber-card-bg: #f6f4f0;
+            --barber-text: #1a1a1a;
+            --barber-muted: #5a5853;
+            --barber-accent: #8b0000;
+            --serif-font: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        html { -webkit-text-size-adjust: 100%; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--barber-cream);
+            color: var(--barber-text);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .navbar-custom {
+            background-color: var(--barber-black);
+            border-bottom: 2px solid var(--barber-black);
+        }
+
+        .navbar-custom .nav-link,
+        .navbar-custom .navbar-brand {
+            color: #ffffff !important;
+            letter-spacing: 1px;
+        }
+
+        .navbar-custom .nav-link:hover { color: #d1c3b1 !important; }
+
+        .navbar-brand { font-size: clamp(1.1rem, 4vw, 1.4rem); }
+
+        h2, h5 { font-family: var(--serif-font); }
+
+        header.d-flex { gap: 15px; }
+        header h2 { font-size: clamp(1.4rem, 5vw, 2.2rem); }
+
+        .producto {
+            background-color: var(--barber-card-bg);
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+            border: 1.5px solid var(--barber-black);
+            border-radius: 6px;
+        }
+
+        .producto:hover {
+            transform: translateY(-4px);
+            box-shadow: 5px 5px 0px var(--barber-black);
+        }
+
+        .img-producto {
+            height: clamp(150px, 30vw, 200px);
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+            font-size: 0.9rem;
+            border-bottom: 1.5px solid var(--barber-black);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            overflow: hidden;
+        }
+
+        .img-producto img { width: 100%; height: 100%; object-fit: cover; }
+
+        .offcanvas {
+            background-color: var(--barber-cream);
+            border-left: 2px solid var(--barber-black);
+            width: 100% !important;
+            max-width: 400px;
+        }
+
+        .carrito-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #c9c5bd;
+        }
+
+        .carrito-item .info { flex: 1 1 100%; }
+
+        .carrito-item .precio {
+            font-weight: bold;
+            color: var(--barber-black);
+            margin-left: auto;
+        }
+
+        .total-carrito { font-size: 1.3rem; font-weight: bold; color: var(--barber-black); }
+
+        .btn-primario-custom {
+            background-color: var(--barber-black);
+            color: #ffffff;
+            border: 1.5px solid var(--barber-black);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            min-height: 44px;
+        }
+
+        .btn-primario-custom:hover,
+        .btn-primario-custom:focus {
+            background-color: transparent;
+            color: var(--barber-black);
+        }
+
+        .badge-barber { background-color: var(--barber-accent) !important; }
+        .texto-barber { color: var(--barber-black) !important; }
+
+        .sin-productos { color: var(--barber-muted); text-align: center; padding: 30px 0; }
+
+        .cantidad-control { display: flex; align-items: center; gap: 6px; }
+
+        .cantidad-control button {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid var(--barber-black);
+            background: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cantidad-control span { min-width: 24px; text-align: center; font-weight: bold; }
+
+        .eliminar-item {
+            background: none;
+            border: none;
+            color: var(--barber-accent);
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 8px;
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        /* Input de búsqueda a 16px evita el zoom automático en iPhone */
+        .form-control { font-size: 16px; }
+
+        @media (hover: none) {
+            .producto:hover { transform: none; box-shadow: none; }
+        }
+
+        @media (max-width: 576px) {
+            header.d-flex {
+                flex-direction: column;
+                align-items: stretch !important;
+                text-align: center;
+            }
+            header button { width: 100%; margin-top: 10px; }
+            .navbar-collapse form { margin-top: 10px; }
+            .offcanvas-body { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="index.html">DONDE EL CANCHE</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Mostrar menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="productos.html">PRODUCTOS</a></li>
+        <li class="nav-item"><a class="nav-link" href="citas.html">CITAS</a></li>
+      </ul>
+      <form class="d-flex" role="search" onsubmit="event.preventDefault();">
+        <input class="form-control me-2" type="search" placeholder="Buscar producto..." aria-label="Buscar" id="inputBuscar"/>
+        <button class="btn btn-outline-light" type="submit">Buscar</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4 py-md-5">
+
+    <header class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-dark">
+        <div>
+            <h2 class="fw-bold mb-0 text-uppercase"><i class="bi bi-scissors texto-barber me-2"></i> Productos & Cuidado</h2>
+            <p class="text-muted mb-0">Lleva la mejor calidad a tu estilo diario</p>
+        </div>
+        <button class="btn btn-outline-dark position-relative fw-bold py-2 px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#carritoOffcanvas">
+            <i class="bi bi-bag-fill me-1"></i> Carrito
+            <span class="badge badge-barber rounded-pill position-absolute top-0 start-100 translate-middle" id="contadorCarrito">0</span>
+        </button>
+    </header>
+
+    <div class="row g-3 g-md-4" id="listaProductos"></div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="carritoOffcanvas">
+        <div class="offcanvas-header border-bottom border-dark">
+            <h5 class="texto-barber fw-bold mb-0"><i class="bi bi-cart-check-fill me-2"></i> Tu Pedido</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div id="contenedorCarrito">
+                <div id="mensajeVacio" class="sin-productos">
+                    <i class="bi bi-bag-x display-3 d-block mb-2"></i>
+                    <p>Tu carrito está vacío</p>
+                </div>
+                <div id="listaCarrito"></div>
+            </div>
+            <div class="mt-auto pt-3 border-top border-dark">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="total-carrito">Total:</span>
+                    <span class="total-carrito texto-barber" id="totalCarrito">Q0.00</span>
+                </div>
+                <button class="btn btn-primario-custom w-100 py-2 mb-2" id="btnComprar" disabled>
+                    <i class="bi bi-whatsapp me-1"></i> Finalizar por WhatsApp
+                </button>
+                <button class="btn btn-outline-danger w-100 btn-sm" id="btnVaciar">
+                    <i class="bi bi-trash3"></i> Vaciar carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 1. DATOS DE PRODUCTOS
+    const productos = [
+        { id: 1, nombre: 'Pomada para Cabello (Brillo Moderado)', precio: 75.00, imagen: '' },
+        { id: 2, nombre: 'Cera Mate Efecto Natural', precio: 80.00, imagen: '' },
+        { id: 3, nombre: 'Aceite Hidratante para Barba', precio: 65.00, imagen: '' },
+        { id: 4, nombre: 'Polvo Voluminizador (Styling Powder)', precio: 90.00, imagen: '' },
+        { id: 5, nombre: 'Shampoo Fortalecedor Anticaída', precio: 110.00, imagen: '' },
+        { id: 6, nombre: 'Bálsamo Crecimiento de Barba', precio: 85.00, imagen: '' }
+    ];
+
+    // 2. ESTADO
+    let carrito = [];
+
+    // 3. REFERENCIAS
+    const listaProductos = document.getElementById('listaProductos');
+    const listaCarrito = document.getElementById('listaCarrito');
+    const mensajeVacio = document.getElementById('mensajeVacio');
+    const totalCarrito = document.getElementById('totalCarrito');
+    const contadorCarrito = document.getElementById('contadorCarrito');
+    const btnComprar = document.getElementById('btnComprar');
+    const btnVaciar = document.getElementById('btnVaciar');
+    const inputBuscar = document.getElementById('inputBuscar');
+
+    // 4. FUNCIONES
+    function mostrarProductos(filtro = '') {
+        let html = '';
+        const productosFiltrados = productos.filter(p => p.nombre.toLowerCase().includes(filtro.toLowerCase()));
+
+        if (productosFiltrados.length === 0) {
+            listaProductos.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-search text-muted display-4 d-block mb-2"></i>
+                    <p class="text-muted">No se encontraron productos coincidentes.</p>
+                </div>`;
+            return;
+        }
+
+        for (let i = 0; i < productosFiltrados.length; i++) {
+            const p = productosFiltrados[i];
+            const imagenHTML = p.imagen ?
+                `<img src="${p.imagen}" alt="${p.nombre}">` :
+                `<div class="text-center"><i class="bi bi-scissors" style="font-size: 2.5rem; color: #5a5853;"></i><br><small class="text-muted">Sin imagen</small></div>`;
+
+            html += `
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card producto">
+                        <div class="img-producto">${imagenHTML}</div>
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="card-title fs-6 fw-bold text-uppercase mb-1">${p.nombre}</h5>
+                                <p class="card-text texto-barber fw-bold mb-3">Q${p.precio.toFixed(2)}</p>
+                            </div>
+                            <button class="btn btn-primario-custom agregar-btn w-100" data-id="${p.id}">
+                                <i class="bi bi-bag-plus me-1"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        listaProductos.innerHTML = html;
+    }
+
+    function mostrarCarrito() {
+        listaCarrito.innerHTML = '';
+
+        if (carrito.length === 0) {
+            mensajeVacio.style.display = 'block';
+            listaCarrito.style.display = 'none';
+            btnComprar.disabled = true;
+            totalCarrito.textContent = 'Q0.00';
+            contadorCarrito.textContent = '0';
+            return;
+        }
+
+        mensajeVacio.style.display = 'none';
+        listaCarrito.style.display = 'block';
+        btnComprar.disabled = false;
+
+        let total = 0;
+        let cantidadTotal = 0;
+
+        for (let i = 0; i < carrito.length; i++) {
+            const item = carrito[i];
+            const subtotal = item.precio * item.cantidad;
+            total += subtotal;
+            cantidadTotal += item.cantidad;
+
+            const div = document.createElement('div');
+            div.className = 'carrito-item';
+            div.innerHTML = `
+                <div class="info">
+                    <div><strong>${item.nombre}</strong></div>
+                    <div class="text-muted small">Q${item.precio.toFixed(2)} c/u</div>
+                </div>
+                <div class="cantidad-control">
+                    <button class="btn-disminuir" data-index="${i}" aria-label="Quitar uno">−</button>
+                    <span>${item.cantidad}</span>
+                    <button class="btn-aumentar" data-index="${i}" aria-label="Agregar uno">+</button>
+                </div>
+                <div class="precio">Q${subtotal.toFixed(2)}</div>
+                <button class="eliminar-item" data-index="${i}" title="Eliminar producto" aria-label="Eliminar producto">✕</button>
+            `;
+            listaCarrito.appendChild(div);
+        }
+
+        totalCarrito.textContent = `Q${total.toFixed(2)}`;
+        contadorCarrito.textContent = cantidadTotal;
+    }
+
+    function agregarAlCarrito(idProducto) {
+        const productoEncontrado = productos.find(p => p.id === idProducto);
+        if (!productoEncontrado) return;
+
+        const existente = carrito.find(c => c.id === idProducto);
+        if (existente) {
+            existente.cantidad += 1;
+        } else {
+            carrito.push({
+                id: productoEncontrado.id,
+                nombre: productoEncontrado.nombre,
+                precio: productoEncontrado.precio,
+                cantidad: 1
+            });
+        }
+
+        mostrarCarrito();
+        bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('carritoOffcanvas')).show();
+    }
+
+    function eliminarDelCarrito(index) {
+        if (index >= 0 && index < carrito.length) {
+            carrito.splice(index, 1);
+            mostrarCarrito();
+        }
+    }
+
+    function cambiarCantidad(index, delta) {
+        if (index < 0 || index >= carrito.length) return;
+        const nuevaCantidad = carrito[index].cantidad + delta;
+        if (nuevaCantidad <= 0) {
+            eliminarDelCarrito(index);
+        } else {
+            carrito[index].cantidad = nuevaCantidad;
+            mostrarCarrito();
+        }
+    }
+
+    function vaciarCarrito() {
+        if (carrito.length === 0) return;
+        carrito = [];
+        mostrarCarrito();
+    }
+
+    function finalizarCompra() {
+        if (carrito.length === 0) return;
+        let mensaje = "¡Hola Barbería Donde El Canche! Me gustaría hacer el siguiente pedido:\n\n";
+        let total = 0;
+
+        for (let i = 0; i < carrito.length; i++) {
+            const subtotal = carrito[i].precio * carrito[i].cantidad;
+            mensaje += `- ${carrito[i].nombre} x${carrito[i].cantidad} (Q${subtotal.toFixed(2)})\n`;
+            total += subtotal;
+        }
+
+        mensaje += `\n*Total a pagar: Q${total.toFixed(2)}*`;
+
+        const numeroWhatsapp = "50251514006";
+        const url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`;
+        // En celulares algunos navegadores bloquean window.open; location funciona siempre
+        const w = window.open(url, '_blank');
+        if (!w) window.location.href = url;
+    }
+
+    // 5. EVENTOS
+    listaProductos.addEventListener('click', function(e) {
+        const btn = e.target.closest('.agregar-btn');
+        if (btn) agregarAlCarrito(parseInt(btn.dataset.id, 10));
+    });
+
+    listaCarrito.addEventListener('click', function(e) {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const index = parseInt(btn.dataset.index, 10);
+        if (btn.classList.contains('btn-disminuir')) cambiarCantidad(index, -1);
+        else if (btn.classList.contains('btn-aumentar')) cambiarCantidad(index, 1);
+        else if (btn.classList.contains('eliminar-item')) eliminarDelCarrito(index);
+    });
+
+    if (inputBuscar) {
+        inputBuscar.addEventListener('input', e => mostrarProductos(e.target.value));
+    }
+
+    btnVaciar.addEventListener('click', vaciarCarrito);
+    btnComprar.addEventListener('click', finalizarCompra);
+
+    // 6. INICIO
+    mostrarProductos();
+    mostrarCarrito();
+</script>
+
+</body>
+</html>

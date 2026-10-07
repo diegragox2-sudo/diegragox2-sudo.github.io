@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>Agendar Cita - Barbería Donde El Canche</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --barber-black: #1a1a1a;
+            --barber-cream: #eceae6;
+        }
+
+        html { -webkit-text-size-adjust: 100%; }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--barber-cream);
+            color: var(--barber-black);
+            padding-top: 56px;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .navbar-custom {
+            background-color: var(--barber-black);
+            border-bottom: 1px solid #333;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #ffffff !important;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+        }
+
+        .nav-link { color: rgba(255,255,255,0.8) !important; }
+        .nav-link.active { color: #ffffff !important; font-weight: 600; }
+
+        .contenedor-pagina {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 56px);
+            min-height: calc(100dvh - 56px);
+            padding: clamp(20px, 5vw, 40px) 15px;
+        }
+
+        .tarjeta {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-top: 4px solid var(--barber-black);
+            border-radius: 8px;
+            padding: clamp(20px, 6vw, 40px);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tarjeta h1 {
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
+            font-weight: 700;
+            color: var(--barber-black);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .tarjeta p.subtitulo {
+            color: #6b7280;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            margin-bottom: clamp(15px, 4vw, 30px);
+            text-align: center;
+        }
+
+        .form-label { font-weight: 600; color: var(--barber-black); margin-bottom: 5px; }
+
+        /* 16px evita el zoom automático al tocar un campo en iPhone */
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            padding: 10px 15px;
+            min-height: 44px;
+            font-size: 16px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--barber-black);
+            box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.15);
+        }
+
+        .btn-agendar {
+            background-color: var(--barber-black);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+            min-height: 48px;
+        }
+        .btn-agendar:hover, .btn-agendar:focus { background-color: #333; color: #ffffff; }
+
+        @media (max-width: 576px) {
+            .input-group-text { display: none; }
+            .input-group > .form-control { border-radius: 6px !important; }
+            .form-text { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="index.html">DONDE EL CANCHE</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Mostrar menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="productos.html">PRODUCTOS</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="citas.html">CITAS</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="contenedor-pagina">
+        <div class="tarjeta">
+            <h1><i class="bi bi-calendar-check me-2"></i>Agendar Cita</h1>
+            <p class="subtitulo">Reserva tu espacio con nosotros de forma rápida.</p>
+
+            <form id="formCita">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre Completo</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="nombre" placeholder="Ej. Juan Pérez" autocomplete="name" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono de Contacto</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                        <input type="tel" class="form-control" id="telefono" placeholder="Ej. 5555-5555" autocomplete="tel" inputmode="tel" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" required>
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="hora" class="form-label">Hora</label>
+                        <input type="time" class="form-control" id="hora" min="10:00" max="19:00" required>
+                        <div class="form-text">Horario: 10:00 a. m. – 1:00 p. m. y 3:00 p. m. – 7:00 p. m.</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="barbero" class="form-label">Selecciona tu Barbero (Opcional)</label>
+                    <select class="form-select" id="barbero">
+                        <option value="Cualquiera" selected>Cualquier barbero disponible</option>
+                        <option value="El Canche">El Canche</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-agendar">
+                    <i class="bi bi-whatsapp me-2"></i>Enviar Solicitud por WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Fecha mínima = hoy (en hora local, no UTC)
+        const dateInput = document.getElementById('fecha');
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+        function horaValida(h) {
+            // Abierto 10:00–13:00 y 15:00–19:00
+            return (h >= '10:00' && h <= '13:00') || (h >= '15:00' && h <= '19:00');
+        }
+
+        document.getElementById('formCita').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const fecha = document.getElementById('fecha').value;
+            const hora = document.getElementById('hora').value;
+            const barbero = document.getElementById('barbero').value;
+
+            if (!horaValida(hora)) {
+                alert('Por favor elige una hora dentro del horario: 10:00 a. m. – 1:00 p. m. o 3:00 p. m. – 7:00 p. m.');
+                return;
+            }
+
+            const numeroBarberia = "50251514006";
+
+            const mensaje = `¡Hola Barbería Donde El Canche! 👋\n\nMe gustaría agendar una cita:\n\n👤 *Nombre:* ${nombre}\n📞 *Teléfono:* ${telefono}\n📅 *Fecha:* ${fecha}\n⏰ *Hora:* ${hora}\n💈 *Barbero:* ${barbero}\n\nQuedo a la espera de su confirmación. ¡Gracias!`;
+
+            const urlWhatsApp = `https://wa.me/${numeroBarberia}?text=${encodeURIComponent(mensaje)}`;
+            // En celulares algunos navegadores bloquean window.open; location funciona siempre
+            const w = window.open(urlWhatsApp, '_blank');
+            if (!w) window.location.href = urlWhatsApp;
+        });
+    </script>
+</body>
+</html>
