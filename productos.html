@@ -158,6 +158,40 @@
         /* Input de búsqueda a 16px evita el zoom automático en iPhone */
         .form-control { font-size: 16px; }
 
+        /* Pantalla "Próximamente" */
+        .proximamente {
+            min-height: calc(100vh - 56px);
+            min-height: calc(100dvh - 56px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .proximamente .icono {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            border: 2px solid var(--barber-black);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+        }
+        .proximamente h1 {
+            font-family: var(--serif-font);
+            font-weight: 900;
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+        .proximamente p {
+            color: var(--barber-muted);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            max-width: 480px;
+            margin-bottom: 28px;
+        }
+
         @media (hover: none) {
             .producto:hover { transform: none; box-shadow: none; }
         }
@@ -196,7 +230,15 @@
   </div>
 </nav>
 
-<div class="container py-4 py-md-5">
+<!-- Mensaje de "Próximamente" (se muestra mientras PROXIMAMENTE = true) -->
+<section class="proximamente" id="proximamente" hidden>
+    <div class="icono"><i class="bi bi-hourglass-split"></i></div>
+    <h1>Próximamente</h1>
+    <p>Muy pronto podrás ver y pedir nuestros productos desde aquí. ¡Estamos preparando todo para ti!</p>
+    <a href="index.html" class="btn btn-primario-custom px-4 d-inline-flex align-items-center">Volver al inicio</a>
+</section>
+
+<div class="container py-4 py-md-5" id="contenidoProductos">
 
     <header class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-dark">
         <div>
@@ -411,7 +453,7 @@
 
         mensaje += `\n*Total a pagar: Q${total.toFixed(2)}*`;
 
-        const numeroWhatsapp = "50236092031";
+        const numeroWhatsapp = "50251514006";
         const url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`;
         // En celulares algunos navegadores bloquean window.open; location funciona siempre
         const w = window.open(url, '_blank');
@@ -441,8 +483,16 @@
     btnComprar.addEventListener('click', finalizarCompra);
 
     // 6. INICIO
-    mostrarProductos();
-    mostrarCarrito();
+    // Cambia a false cuando quieras activar la tienda de nuevo
+    const PROXIMAMENTE = true;
+
+    if (PROXIMAMENTE) {
+        document.getElementById('contenidoProductos').hidden = true;
+        document.getElementById('proximamente').hidden = false;
+    } else {
+        mostrarProductos();
+        mostrarCarrito();
+    }
 </script>
 
 </body>
