@@ -163,7 +163,7 @@
                     <div class="col-12 col-md-6 mb-3">
                         <label for="hora" class="form-label">Hora</label>
                         <input type="time" class="form-control" id="hora" min="10:00" max="19:00" required>
-                        <div class="form-text">Horario: 10:00 a. m. – 1:00 p. m. y 3:00 p. m. – 7:00 p. m.</div>
+                        <div class="form-text">Lun–sáb: 10 a. m.–1 p. m. y 3–7 p. m. · Domingo: 2–7 p. m.</div>
                     </div>
                 </div>
 
@@ -193,8 +193,10 @@
         const dd = String(hoy.getDate()).padStart(2, '0');
         dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-        function horaValida(h) {
-            // Abierto 10:00–13:00 y 15:00–19:00
+        function horaValida(h, fecha) {
+            // Domingo: 14:00–19:00 | Lunes a sábado: 10:00–13:00 y 15:00–19:00
+            const dia = new Date(fecha + 'T00:00:00').getDay(); // 0 = domingo
+            if (dia === 0) return h >= '14:00' && h <= '19:00';
             return (h >= '10:00' && h <= '13:00') || (h >= '15:00' && h <= '19:00');
         }
 
@@ -207,12 +209,12 @@
             const hora = document.getElementById('hora').value;
             const barbero = document.getElementById('barbero').value;
 
-            if (!horaValida(hora)) {
-                alert('Por favor elige una hora dentro del horario: 10:00 a. m. – 1:00 p. m. o 3:00 p. m. – 7:00 p. m.');
+            if (!horaValida(hora, fecha)) {
+                alert('Por favor elige una hora dentro del horario:\nLunes a sábado: 10:00 a. m. – 1:00 p. m. y 3:00 p. m. – 7:00 p. m.\nDomingo: 2:00 p. m. – 7:00 p. m.');
                 return;
             }
 
-            const numeroBarberia = "50236092031";
+            const numeroBarberia = "50251514006";
 
             const mensaje = `¡Hola Barbería Donde El Canche! 👋\n\nMe gustaría agendar una cita:\n\n👤 *Nombre:* ${nombre}\n📞 *Teléfono:* ${telefono}\n📅 *Fecha:* ${fecha}\n⏰ *Hora:* ${hora}\n💈 *Barbero:* ${barbero}\n\nQuedo a la espera de su confirmación. ¡Gracias!`;
 
